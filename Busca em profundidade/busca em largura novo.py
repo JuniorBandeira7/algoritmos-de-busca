@@ -6,6 +6,8 @@ grafo = {
     (0,1,0,0,0,0,1,1,1): [(0,0,0,0,0,0,0,1,0), (0,1,0,0,0,0,0,0,0)],
     (0,0,1,0,0,0,1,1,1): [(0,0,0,0,0,0,0,1,0), (0,0,1,0,0,0,0,0,0)],
     (0,0,0,0,1,0,1,1,1): [(0,0,0,0,0,0,0,1,0), (0,0,0,0,1,0,0,0,0)],
+    (0,0,0,0,1,0,0,0,0): [(1,0,0,1,1,0,0,0,1), (0,0,0,0,1,0,1,1,1), (0,0,0,1,1,0,0,0,1), (0,0,0,1,1,1,0,0,1)],
+    (0,0,0,1,1,0,0,0,1): [(0,0,0,0,1,0,0,0,0), (0,0,0,0,0,0,0,0,0)],
     (0,0,0,0,0,1,1,1,1): [(0,0,0,0,0,0,0,1,0), (0,0,0,0,0,1,0,0,0)],
     (0,1,0,0,0,0,0,0,0): [(1,1,1,0,0,0,0,0,1), (0,1,0,0,0,0,1,1,1), (1,1,0,1,0,0,0,0,1)],
     (0,0,1,0,0,0,0,0,0): [(1,1,1,0,0,0,0,0,1), (0,0,1,0,0,0,1,1,1), (1,0,0,1,1,0,0,0,1)],
@@ -79,10 +81,10 @@ while sucesso == False and pilhaDeAbertos != []:
     caminhoAtual = pilhaDeAbertos.pop(0)#Remover o primeiro caminho da lista
     noCandidato = caminhoAtual[-1]#Pegar o último nó do caminho atual
     listaDeFechados.append(noCandidato)
-    for i in actions[noCandidato]:
-        if i == (0,0,0,0,0,1,1,1,1):
+    for i in grafo[noCandidato]:
+        if i == (1,1,1,1,1,1,1,1,1):
             sucesso = True
-            caminhoAtual.append(17)#Adicionar o nó de destino ao caminho atual
+            caminhoAtual.append(i)#Adicionar o nó de destino ao caminho atual+
             resposta = caminhoAtual#Armazenar o caminho encontrado
             break
         else:
