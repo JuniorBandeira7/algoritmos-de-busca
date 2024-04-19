@@ -75,12 +75,12 @@ grafo = {
 
 resposta = None
 pilhaDeAbertos = [[(0,0,0,0,0,0,0,0,0)]]#Armazena os caminhos em vez de apenas os nós
-listaDeFechados = []
+lista_de_caminhos_fechados = []
 sucesso = False
 while sucesso == False and pilhaDeAbertos != []:
     caminhoAtual = pilhaDeAbertos.pop()#Remover o primeiro caminho da lista
     noCandidato = caminhoAtual[-1]#Pegar o último nó do caminho atual
-    listaDeFechados.append(noCandidato)
+    lista_de_caminhos_fechados.append(noCandidato)
     for i in grafo[noCandidato]:
         if i == (1,1,1,1,1,1,1,1,1):
             sucesso = True
@@ -88,7 +88,7 @@ while sucesso == False and pilhaDeAbertos != []:
             resposta = caminhoAtual#Armazenar o caminho encontrado
             break
         else:
-            if i not in listaDeFechados:
+            if i not in lista_de_caminhos_fechados:
                 novoCaminho = caminhoAtual.copy()#Criar uma cópia do caminho atual
                 novoCaminho.append(i)#Adicionar o novo nó ao caminho
                 pilhaDeAbertos.append(novoCaminho)
