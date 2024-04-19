@@ -72,15 +72,20 @@ grafo = {
     (1,1,1,1,1,1,0,0,0): [(1,1,1,1,1,1,1,0,1), (1,1,1,1,1,1,1,1,1)]
 }
 
+print("Busca em profundidade")
 
 resposta = None
-pilhaDeAbertos = [[(0,0,0,0,0,0,0,0,0)]]#Armazena os caminhos em vez de apenas os nós
-lista_de_caminhos_fechados = []
+lista_de_caminhos_abertos = [[(0,0,0,0,0,0,0,0,0)]]#Armazena os caminhos em vez de apenas os nós
+lista_de_estados_fechado = []
 sucesso = False
-while sucesso == False and pilhaDeAbertos != []:
-    caminhoAtual = pilhaDeAbertos.pop()#Remover o primeiro caminho da lista
+custoCaminho = 0
+custoTotal = 0
+
+while sucesso == False and lista_de_caminhos_abertos != []:
+    custoTotal += 1
+    caminhoAtual = lista_de_caminhos_abertos.pop()#Remover o ultimo caminho da lista
     noCandidato = caminhoAtual[-1]#Pegar o último nó do caminho atual
-    lista_de_caminhos_fechados.append(noCandidato)
+    lista_de_estados_fechado.append(noCandidato)
     for i in grafo[noCandidato]:
         if i == (1,1,1,1,1,1,1,1,1):
             sucesso = True
@@ -88,12 +93,17 @@ while sucesso == False and pilhaDeAbertos != []:
             resposta = caminhoAtual#Armazenar o caminho encontrado
             break
         else:
-            if i not in lista_de_caminhos_fechados:
+            if i not in lista_de_estados_fechado:
                 novoCaminho = caminhoAtual.copy()#Criar uma cópia do caminho atual
                 novoCaminho.append(i)#Adicionar o novo nó ao caminho
-                pilhaDeAbertos.append(novoCaminho)
+                lista_de_caminhos_abertos.append(novoCaminho)
 if sucesso == False:
     print("Não achou")
 else:
-    print("Caminho encontrado:", resposta)
+    print("Caminho encontrado:")
+    for i in resposta:
+        print(i)
+        custoCaminho += 1
+    print("Custo do caminho:", custoCaminho)
+    print("Custo total:", custoTotal)
 
