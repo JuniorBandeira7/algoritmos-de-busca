@@ -1,3 +1,9 @@
+import json
+import os
+import webbrowser
+import http.server
+import socketserver
+import threading
 grafo = {
     (0,0,0,0,0,0,0,0,0): [(1,0,0,1,0,0,0,0,1), (0,0,0,0,0,0,1,1,1)],
     (1,0,0,1,0,0,0,0,1): [(0,0,0,0,0,0,0,0,0)],
@@ -107,3 +113,48 @@ else:
     print("Custo do caminho:", custoCaminho)
     print("Custo total:", custoTotal)
 
+    caminho_pasta = "Busca_em_profundidade_e_largura/animacao"  
+    
+    if not os.path.exists(caminho_pasta):
+        os.makedirs(caminho_pasta)
+    
+    nome_arquivo = "dados.json"
+    
+    caminho_arquivo = os.path.join(caminho_pasta, nome_arquivo)
+
+    with open(caminho_arquivo, "w") as arquivo:
+        json.dump(resposta, arquivo)
+    
+    def abrir_navegador(url):
+        # Abrir o navegador no URL especificado
+        webbrowser.open(url)
+
+    def iniciar_servidor(diretorio):
+        # Obter o diretório absoluto do servidor
+        diretorio_absoluto = os.path.abspath(diretorio)
+
+        # Configurar o servidor web local para servir arquivos a partir do diretório específico
+        porta = 8000
+        os.chdir(diretorio_absoluto)  # Mudar para o diretório de onde os arquivos serão servidos
+        handler = http.server.SimpleHTTPRequestHandler
+
+        # Desativar o bloqueio de endereço já em uso para reinicializações rápidas
+        socketserver.TCPServer.allow_reuse_address = True
+
+        # Iniciar o servidor web local
+        httpd = socketserver.TCPServer(("", porta), handler)
+        print(f"Servidor web iniciado em http://localhost:{porta}")
+        
+        # Abrir o navegador no URL especificado após iniciar o servidor
+        abrir_navegador(f"http://localhost:{porta}")
+
+        # Servir os arquivos continuamente até que o servidor seja interrompido
+        httpd.serve_forever()
+    diretorio_servidor = "Busca_em_profundidade_e_largura/animacao"
+
+    # Iniciar o servidor web local em uma thread separada
+    servidor_thread = threading.Thread(target=iniciar_servidor, args=(diretorio_servidor,))
+    servidor_thread.start()
+
+    # Aguardar a execução principal terminar para encerrar o servidor web
+    servidor_thread.join()

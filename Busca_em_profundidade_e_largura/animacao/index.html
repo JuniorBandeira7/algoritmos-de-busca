@@ -28,9 +28,6 @@
             <img src="barco.png" id="barco">
 
         </div>
-        <button style="margin-left: 3rem; margin-top: 1px; padding: .9rem;"
-            onclick="movePessoa()">Executar
-            movimento</button>
         <div class="canto" id="esquerda">
             <img src="cara.png" class="pessoas" id="pai-esquerda">
             <img src="garoto.png" class="pessoas" id="filho-esquerda">
@@ -42,6 +39,9 @@
             <img src="terrorista.png" class="pessoas" id="bandido-esquerda">
         </div>
     </section>
+    <div id="div-botao">
+        <button onclick="movePessoa()">Executar movimento</button>
+    </div>
 </body>
 
 </html>
@@ -143,6 +143,7 @@
         display: flex;
         height: 100vh;
         align-items: center;
+        flex-direction: column;
     }
 
     #esquerda {
@@ -165,7 +166,8 @@
     }
 
     button {
-        position: absolute;
+        width: 1000px;
+        height: 100px;
 
     }
 
@@ -252,27 +254,30 @@
 </style>
 
 <script>
-    //Receber a sequencia de jogadas que o algortmo de busca encontrou
-    let listaDeListas = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1],
-        [0, 0, 0, 0, 0, 0, 0, 1, 0],
-        [0, 1, 0, 0, 0, 0, 1, 1, 1],
-        [0, 1, 0, 0, 0, 0, 0, 0, 0],
-        [1, 1, 1, 0, 0, 0, 0, 0, 1],
-        [0, 1, 1, 0, 0, 0, 0, 0, 0],
-        [1, 1, 1, 1, 0, 0, 0, 0, 1],
-        [1, 1, 1, 0, 0, 0, 0, 0, 0],
-        [1, 1, 1, 0, 0, 0, 1, 1, 1],
-        [0, 1, 1, 0, 0, 0, 1, 1, 0],
-        [1, 1, 1, 1, 0, 0, 1, 1, 1],
-        [1, 1, 1, 0, 0, 0, 1, 1, 0],
-        [1, 1, 1, 1, 1, 0, 1, 1, 1],
-        [1, 1, 1, 1, 1, 0, 0, 0, 0],
-        [1, 1, 1, 1, 1, 1, 1, 0, 1],
-        [1, 1, 1, 1, 1, 1, 0, 0, 0],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1]
-    ];
+    const jsonUrl = 'dados.json';
+    let listaDeListas
+
+    function atribuirListaDeListas(dados) {
+    listaDeListas = dados;
+}
+
+    async function carregarJSON() {
+        try {
+            const resposta = await fetch(jsonUrl);
+
+            if (!resposta.ok) {
+                throw new Error(`Erro ao carregar o arquivo JSON: ${resposta.status}`);
+            }
+
+            const dados = await resposta.json();
+
+            atribuirListaDeListas(dados);
+
+        } catch (erro) {
+            console.error('Erro ao carregar o arquivo JSON:', erro);
+        }
+
+    }
 
     var jogadas = 1;
 
@@ -336,5 +341,13 @@
         trocarEstado();
         jogadas++;
     }
+    carregarJSON()
+    
+
+
+
+
+
+
 
 </script>
